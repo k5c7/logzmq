@@ -5,13 +5,29 @@ project(logzmq LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(logzmq main.cpp
-    logger.h logger.cpp)
+message("System: " ${CMAKE_SYSTEM_NAME} " " ${CMAKE_SYSTEM_VERSION})
+message("Processor: " ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
+message("Compiler: " ${CMAKE_CXX_COMPILER_ID} " " ${CMAKE_CXX_COMPILER_VERSION})
 
-target_compile_options(logzmq PRIVATE -Wall)
-target_compile_options(logzmq PRIVATE -Werror)
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(CMAKE_TOOLCHAIN_FILE "C:/vcpkg/scripts/buildsystems/vcpkg.cmake")
+    set(VCPKG_TARGET_TRIPLET "x64-windows")
+endif()
 
-target_link_libraries(logzmq PRIVATE zmq)
+add_executable(logzmq
+    main.cpp
+    logger.h
+    logger.cpp)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    find_package(cppzmq CONFIG REQUIRED)
+    target_link_libraries(logzmq PRIVATE cppzmq)
+else()
+    target_link_libraries(logzmq PRIVATE zmq)
+    target_compile_options(logzmq PRIVATE -Wall)
+    target_compile_options(logzmq PRIVATE -Werror)
+endif()
+
 
 include(GNUInstallDirs)
 install(TARGETS logzmq
