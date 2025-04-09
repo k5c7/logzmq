@@ -12,7 +12,7 @@ int main()
 
     for (size_t idx = 0; idx < size; idx++)
     {
-        vec[idx] = idx;
+        vec[idx] = static_cast<float>(idx);
     }
 
     while (true)

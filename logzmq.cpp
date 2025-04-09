@@ -54,7 +54,7 @@ std::vector<T> Subscriber<T>::subscribe()
 
     if (!opt_size.has_value())
     {
-        std::cerr << "Error occured at recv!" << std::endl;
+        std::cerr << "Error occured at recv!\n";
         return std::vector<T>();
     }
 
@@ -62,6 +62,21 @@ std::vector<T> Subscriber<T>::subscribe()
     std::memcpy(output.data(), update.data(), opt_size.value());
 
     return output;
+}
+
+template<typename T>
+void Subscriber<T>::subscribe(T* buffer)
+{
+    zmq::message_t update;
+    const auto opt_size = m_subscriber.recv(update, zmq::recv_flags::none);
+
+    if (!opt_size.has_value())
+    {
+        std::cerr << "Error occured at recv!\n";
+        return;
+    }
+
+    std::memcpy(buffer, update.data(), opt_size.value());
 }
 
 
