@@ -5,6 +5,7 @@ project(logzmq LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+message("Build type: " ${CMAKE_BUILD_TYPE})
 message("System: " ${CMAKE_SYSTEM_NAME} " " ${CMAKE_SYSTEM_VERSION})
 message("Processor: " ${CMAKE_CXX_COMPILER_ARCHITECTURE_ID})
 message("Compiler: " ${CMAKE_CXX_COMPILER_ID} " " ${CMAKE_CXX_COMPILER_VERSION})
