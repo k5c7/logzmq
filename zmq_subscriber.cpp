@@ -1,6 +1,6 @@
 #include <iostream>
 #include <zmq.hpp>
-#include "logger.h"
+#include "logzmq.h"
 
 int main()
 {

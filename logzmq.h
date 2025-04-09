@@ -1,5 +1,5 @@
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef LOGZMQ_H
+#define LOGZMQ_H
 #include <string>
 #include <zmq.hpp>
 
@@ -31,4 +31,4 @@ private:
     zmq::socket_t m_subscriber;
 };
 
-#endif // LOGGER_H
+#endif // LOGZMQ_H

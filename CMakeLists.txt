@@ -16,13 +16,13 @@ endif()
 
 add_executable(publisher
     zmq_publisher.cpp
-    logger.h
-    logger.cpp)
+    logzmq.h
+    logzmq.cpp)
 
 add_executable(subscriber
     zmq_subscriber.cpp
-    logger.h
-    logger.cpp)
+    logzmq.h
+    logzmq.cpp)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     find_package(cppzmq CONFIG REQUIRED)

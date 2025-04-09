@@ -1,6 +1,6 @@
-#include <thread>
 #include <chrono>
-#include "logger.h"
+#include <thread>
+#include "logzmq.h"
 
 int main()
 {

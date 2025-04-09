@@ -1,6 +1,6 @@
-#include "logger.h"
-#include <zmq.hpp>
 #include <iostream>
+#include <zmq.hpp>
+#include "logzmq.h"
 
 template <typename T>
 Publisher<T>::Publisher(const std::string& address) :
