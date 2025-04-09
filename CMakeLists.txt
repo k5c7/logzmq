@@ -14,23 +14,23 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(VCPKG_TARGET_TRIPLET "x64-windows")
 endif()
 
-add_executable(logzmq
-    main.cpp
+add_executable(publisher
+    zmq_publisher.cpp
     logger.h
     logger.cpp)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     find_package(cppzmq CONFIG REQUIRED)
-    target_link_libraries(logzmq PRIVATE cppzmq)
+    target_link_libraries(publisher PRIVATE cppzmq)
 else()
-    target_link_libraries(logzmq PRIVATE zmq)
-    target_compile_options(logzmq PRIVATE -Wall)
-    target_compile_options(logzmq PRIVATE -Werror)
+    target_link_libraries(publisher PRIVATE zmq)
+    target_compile_options(publisher PRIVATE -Wall)
+    target_compile_options(publisher PRIVATE -Werror)
 endif()
 
 
 include(GNUInstallDirs)
-install(TARGETS logzmq
+install(TARGETS publisher
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
