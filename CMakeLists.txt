@@ -19,13 +19,20 @@ add_executable(publisher
     logger.h
     logger.cpp)
 
+add_executable(subscriber
+    zmq_subscriber.cpp
+    logger.h
+    logger.cpp)
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     find_package(cppzmq CONFIG REQUIRED)
-    target_link_libraries(publisher PRIVATE cppzmq)
+    target_link_libraries(publisher PRIVATE cppzmq-static)
+    target_link_libraries(subscriber PRIVATE cppzmq-static)
 else()
     target_link_libraries(publisher PRIVATE zmq)
-    target_compile_options(publisher PRIVATE -Wall)
-    target_compile_options(publisher PRIVATE -Werror)
+    target_link_libraries(subscriber PRIVATE zmq)
+    target_compile_options(publisher PRIVATE -Wall -Wextra -Werror)
+    target_compile_options(subscriber PRIVATE -Wall -Wextra -Werror)
 endif()
 
 

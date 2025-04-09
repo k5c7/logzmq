@@ -1,9 +1,9 @@
 #include "logger.h"
 #include <zmq.hpp>
-
+#include <iostream>
 
 template <typename T>
-Logger<T>::Logger(const std::string& address) :
+Publisher<T>::Publisher(const std::string& address) :
     m_address{address},
     m_context{1}
 {
@@ -12,7 +12,7 @@ Logger<T>::Logger(const std::string& address) :
 }
 
 template <typename T>
-void Logger<T>::log(T number)
+void Publisher<T>::publish(T number)
 {
     zmq::message_t message(sizeof(T));
     memcpy(message.data(), &number, sizeof(T));
@@ -20,7 +20,7 @@ void Logger<T>::log(T number)
 }
 
 template<typename T>
-void Logger<T>::log(T* numbers, size_t size)
+void Publisher<T>::publish(T* numbers, size_t size)
 {
     zmq::message_t message(sizeof(T) * size);
     memcpy(message.data(), numbers, sizeof(T)*size);
@@ -28,7 +28,7 @@ void Logger<T>::log(T* numbers, size_t size)
 }
 
 template<typename T>
-void Logger<T>::log(const std::vector<T>& numbers)
+void Publisher<T>::publish(const std::vector<T>& numbers)
 {
     zmq::message_t message(sizeof(T) * numbers.size());
     memcpy(message.data(), numbers.data(), sizeof(T)* numbers.size());
@@ -36,6 +36,36 @@ void Logger<T>::log(const std::vector<T>& numbers)
 }
 
 
-template class Logger<float>;
-template class Logger<double>;
+template<typename T>
+Subscriber<T>::Subscriber(const std::string& address) :
+    m_address{address},
+    m_context{1}
+{
+    m_subscriber = zmq::socket_t(m_context, zmq::socket_type::sub);
+    m_subscriber.connect(m_address);
+    m_subscriber.set(zmq::sockopt::subscribe, "");
+}
 
+template<typename T>
+std::vector<T> Subscriber<T>::subscribe()
+{
+    zmq::message_t update;
+    const auto opt_size = m_subscriber.recv(update, zmq::recv_flags::none);
+
+    if (!opt_size.has_value())
+    {
+        std::cerr << "Error occured at recv!" << std::endl;
+        return std::vector<T>();
+    }
+
+    std::vector<T> output(opt_size.value() / (sizeof(T)));
+    std::memcpy(output.data(), update.data(), opt_size.value());
+
+    return output;
+}
+
+
+template class Publisher<float>;
+template class Publisher<double>;
+template class Subscriber<float>;
+template class Subscriber<double>;

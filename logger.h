@@ -4,18 +4,31 @@
 #include <zmq.hpp>
 
 template <typename T>
-class Logger
+class Publisher
 {
 public:
-    explicit Logger(const std::string& address);
-    void log(T number);
-    void log(T* numbers, size_t size);
-    void log(const std::vector<T>& numbers);
+    explicit Publisher(const std::string& address);
+    void publish(T number);
+    void publish(T* numbers, size_t size);
+    void publish(const std::vector<T>& numbers);
 
 private:
     const std::string m_address;
     zmq::context_t m_context;
     zmq::socket_t m_publisher;
+};
+
+template<typename T>
+class Subscriber
+{
+public:
+    explicit Subscriber(const std::string& address);
+    [[nodiscard]] std::vector<T> subscribe();
+
+private:
+    const std::string m_address;
+    zmq::context_t m_context;
+    zmq::socket_t m_subscriber;
 };
 
 #endif // LOGGER_H
