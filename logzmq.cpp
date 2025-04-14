@@ -65,7 +65,7 @@ std::vector<T> Subscriber<T>::subscribe()
 }
 
 template<typename T>
-void Subscriber<T>::subscribe(T* buffer)
+size_t Subscriber<T>::subscribe(T* buffer)
 {
     zmq::message_t update;
     const auto opt_size = m_subscriber.recv(update, zmq::recv_flags::none);
@@ -73,10 +73,11 @@ void Subscriber<T>::subscribe(T* buffer)
     if (!opt_size.has_value())
     {
         std::cerr << "Error occured at recv!\n";
-        return;
+        return 0;
     }
 
     std::memcpy(buffer, update.data(), opt_size.value());
+    return opt_size.value();
 }
 
 
