@@ -24,7 +24,7 @@ class Subscriber
 public:
     explicit Subscriber(const std::string& address);
     [[nodiscard]] std::vector<T> subscribe();
-    void subscribe(T* buffer);
+    [[nodiscard]] size_t subscribe(T* buffer);
 
 private:
     const std::string m_address;
